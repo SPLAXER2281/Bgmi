@@ -55,9 +55,10 @@ async def start_attack(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"Error: {e}")
 
 # Flask route to handle webhook updates
-@flask_app.route(f"/webhook", methods=["POST"])
+@flask_app.route("/webhook", methods=["POST"])
 def webhook():
-    update = Update.de_json(request.get_json(), bot)
+    json_data = request.get_json(force=True)  # Get JSON data from the request
+    update = Update.de_json(json_data, bot)
     app.process_update(update)
     return "OK", 200
 
